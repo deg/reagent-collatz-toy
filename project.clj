@@ -1,6 +1,6 @@
 (defproject reframe-toy1 "0.1.0-SNAPSHOT"
-  :dependencies [[org.clojure/clojure "1.6.0"]
-                 [org.clojure/clojurescript "0.0-3211"]
+  :dependencies [[org.clojure/clojure "1.7.0"]
+                 [org.clojure/clojurescript "1.7.48"]
                  [reagent "0.5.0"]
                  [re-frame "0.4.1"]
                  [re-com "0.5.4"]
@@ -9,7 +9,7 @@
   :source-paths ["src/clj"]
 
   :plugins [[lein-cljsbuild "1.0.6"]
-            [lein-figwheel "0.3.3" :exclusions [cider/cider-nrepl]]]
+            [lein-figwheel "0.3.7" :exclusions [cider/cider-nrepl]]]
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target" "test/js"]
 
