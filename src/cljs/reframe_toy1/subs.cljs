@@ -8,6 +8,21 @@
    (reaction (:name @db))))
 
 (re-frame/register-sub
+ :generations
+ (fn [db]
+   (reaction (:generations @db))))
+
+(re-frame/register-sub
+ :max-generations
+ (fn [db]
+   (reaction (:max-generations @db))))
+
+(re-frame/register-sub
+ :values
+ (fn [db]
+   (reaction (:values @db))))
+
+(re-frame/register-sub
  :active-panel
  (fn [db _]
    (reaction (:active-panel @db))))

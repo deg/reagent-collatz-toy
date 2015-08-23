@@ -4,7 +4,8 @@
                  [reagent "0.5.0"]
                  [re-frame "0.4.1"]
                  [re-com "0.5.4"]
-                 [secretary "1.2.3"]]
+                 [secretary "1.2.3"]
+                 [prismatic/schema "0.4.4"]]
 
   :source-paths ["src/clj"]
 

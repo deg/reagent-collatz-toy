@@ -1,10 +1,25 @@
 (ns reframe-toy1.views
-    (:require [re-frame.core :as re-frame]
+    (:require [re-frame.core :refer [subscribe dispatch]]
               [re-com.core :as re-com]))
+
+
+
+;; --------------------
+(defn footer-panel []
+  [re-com/v-box
+   :children ["A Degel toy application"
+              [re-com/h-box
+               :justify :start
+               :gap "2em"
+               :children ["Written by David Goldfarb"
+                          [re-com/hyperlink-href
+                           :label "deg@degel.com"
+                           :href "mailto:deg@degel.com"]]]
+              "Copyright (C) 2015, Degel Software Ltd."]])
 
 ;; --------------------
 (defn home-title []
-  (let [name (re-frame/subscribe [:name])]
+  (let [name (subscribe [:name])]
     (fn []
       [re-com/title
        :label (str "Hello from " @name ". This is the Home Page.")
@@ -16,9 +31,23 @@
    :href "#/about"])
 
 (defn home-panel []
-  [re-com/v-box
-   :gap "1em"
-   :children [[home-title] [link-to-about-page]]])
+  (let [generations (subscribe [:generations])
+        max-generations (subscribe [:max-generations])
+        values (subscribe [:values])]
+    (fn []
+      [re-com/v-box
+       :gap "1em"
+       :children [[home-title]
+                  [re-com/slider
+                   :model generations
+                   :min 1
+                   :max 30
+                   :on-change #(dispatch [:generations %])]
+                  "before"
+                  (str @values)
+                  "after"
+                  [link-to-about-page]
+                  [footer-panel]]])))
 
 ;; --------------------
 (defn about-title []
@@ -34,7 +63,9 @@
 (defn about-panel []
   [re-com/v-box
    :gap "1em"
-   :children [[about-title] [link-to-home-page]]])
+   :children [[about-title]
+              [link-to-home-page]
+              [footer-panel]]])
 
 ;; --------------------
 (defmulti panels identity)
@@ -43,7 +74,7 @@
 (defmethod panels :default [] [:div])
 
 (defn main-panel []
-  (let [active-panel (re-frame/subscribe [:active-panel])]
+  (let [active-panel (subscribe [:active-panel])]
     (fn []
       [re-com/v-box
        :height "100%"
