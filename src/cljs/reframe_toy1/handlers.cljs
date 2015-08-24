@@ -17,3 +17,10 @@
  :generations
  (fn [db [_ n]]
    (calc (assoc db :generations n))))
+
+(re-frame/register-handler
+ :num-columns
+ (fn [db [_ n]]
+   (calc (assoc-in db [:display :num-columns] n))))
+
+

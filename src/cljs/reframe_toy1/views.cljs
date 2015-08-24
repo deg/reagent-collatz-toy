@@ -56,7 +56,8 @@
         [re-com/v-box :children rows]))))
 
 (defn home-panel []
-  (let [generations (subscribe [:generations])
+  (let [description (subscribe [:description])
+        generations (subscribe [:generations])
         num-columns (subscribe [:num-columns])
         max-generations (subscribe [:max-generations])
         values (subscribe [:values])]
@@ -64,11 +65,17 @@
       [re-com/v-box
        :gap "1em"
        :children [[home-title]
+                  @description
                   [re-com/slider
                    :model generations
                    :min 1
                    :max 30
                    :on-change #(dispatch [:generations %])]
+                  [re-com/slider
+                   :model num-columns
+                   :min 1
+                   :max 100
+                   :on-change #(dispatch [:num-columns %])]
                   [numbers-panel]
                   [link-to-about-page]
                   [footer-panel]]])))

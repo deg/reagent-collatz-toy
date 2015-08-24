@@ -8,6 +8,11 @@
    (reaction (:name @db))))
 
 (re-frame/register-sub
+ :description
+ (fn [db]
+   (reaction (:description @db))))
+
+(re-frame/register-sub
  :num-rows
  (fn [db]
    (reaction (-> @db :display :num-rows))))

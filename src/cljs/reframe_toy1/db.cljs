@@ -11,7 +11,10 @@
    :values {s/Int s/Int}})
 
 (def default-db
-  {:name "Number Toy"
+  {:name "Collatz Conjecture Reagent Toy"
+   :description [:div
+                 "For details, see the "
+                 [:a {:href "https://en.wikipedia.org/wiki/Collatz_conjecture"} "Wikipedia page"]]
    :generations 3
    :display {:num-rows 20 :num-columns 10}
    :values {1 1}})
