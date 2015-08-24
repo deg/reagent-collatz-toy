@@ -1,0 +1,13 @@
+.numberBox {
+  width:2rem;
+  height:2rem;
+  display:inline-block;
+}
+
+.highlighted {
+  background:yellow;
+}
+
+.unhighlighted {
+  background:black;
+}

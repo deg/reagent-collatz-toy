@@ -8,6 +8,16 @@
    (reaction (:name @db))))
 
 (re-frame/register-sub
+ :num-rows
+ (fn [db]
+   (reaction (-> @db :display :num-rows))))
+
+(re-frame/register-sub
+ :num-columns
+ (fn [db]
+   (reaction (-> @db :display :num-columns))))
+
+(re-frame/register-sub
  :generations
  (fn [db]
    (reaction (:generations @db))))
@@ -20,7 +30,7 @@
 (re-frame/register-sub
  :values
  (fn [db]
-   (reaction (:values @db))))
+   (reaction (map first (:values @db)))))
 
 (re-frame/register-sub
  :active-panel

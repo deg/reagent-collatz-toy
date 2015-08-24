@@ -22,7 +22,7 @@
   (let [name (subscribe [:name])]
     (fn []
       [re-com/title
-       :label (str "Hello from " @name ". This is the Home Page.")
+       :label (str @name)
        :level :level1])))
 
 (defn link-to-about-page []
@@ -30,8 +30,34 @@
    :label "go to About Page"
    :href "#/about"])
 
+(defn unpack-values [values]
+  (letfn [(helper [candidate remaining]
+            (cond (not (seq remaining))
+                  nil
+                  (= candidate (first remaining))
+                  (cons [candidate true] (lazy-seq (helper (inc candidate) (rest remaining))))
+                  :else
+                  (cons [candidate false] (lazy-seq (helper (inc candidate) remaining)))))]
+    (helper 1 values)))
+
+(defn numbers-panel []
+  (let [num-rows (subscribe [:num-rows])
+        num-columns (subscribe [:num-columns])
+        raw-values (subscribe [:values])]
+    (fn []
+      (let [max-val (* @num-rows @num-columns)
+            values (take max-val (unpack-values @raw-values))
+            divs (map (fn [[n on?]]
+                        [:span {:key n
+                                :class (str "numberBox " (if on? "" "un") "highlighted")}
+                         (str n)])
+                      values)
+            rows (map (fn [spans] [re-com/h-box :children spans]) (partition @num-columns @num-columns "" divs))]
+        [re-com/v-box :children rows]))))
+
 (defn home-panel []
   (let [generations (subscribe [:generations])
+        num-columns (subscribe [:num-columns])
         max-generations (subscribe [:max-generations])
         values (subscribe [:values])]
     (fn []
@@ -43,9 +69,7 @@
                    :min 1
                    :max 30
                    :on-change #(dispatch [:generations %])]
-                  "before"
-                  (str @values)
-                  "after"
+                  [numbers-panel]
                   [link-to-about-page]
                   [footer-panel]]])))
 
