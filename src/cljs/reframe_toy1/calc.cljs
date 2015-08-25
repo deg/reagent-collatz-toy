@@ -1,9 +1,7 @@
 (ns reframe-toy1.calc)
 
 (defn next-gen-of [n]
-  (if (and (> n 1)
-           (= 1 (mod n 3))
-           (= 1 (mod (/ (dec n) 3) 2)))
+  (if (= 4 (mod n 6))
     [(* n 2) (/ (dec n) 3)]
     [(* n 2)]))
 
