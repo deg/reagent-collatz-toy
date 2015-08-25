@@ -1,26 +1,40 @@
 (ns reframe-toy1.handlers
-  (:require [re-frame.core :as re-frame]
+  (:require [re-frame.core :refer [debug trim-v after register-handler]]
             [reframe-toy1.db :as db]
-            [reframe-toy1.calc :refer [calc]]))
+            [reframe-toy1.calc :refer [calc]]
+            [schema.core :as s]))
 
-(re-frame/register-handler
+(defn check-and-throw
+      "throw an exception if db doesn't match the schema."
+      [a-schema db]
+      (if-let [problems (s/check a-schema db)]
+        (throw (js/Error. (str "schema check failed: " problems)))))
+
+(def check-schema-toy (after (partial check-and-throw db/schema)))
+
+(def toy-middleware [check-schema-toy debug trim-v])
+
+(register-handler
  :initialize-db
- (fn  [_ _]
+ toy-middleware
+ (fn  [_]
    (calc (assoc db/default-db :generations 3))))
 
-(re-frame/register-handler
+(register-handler
  :set-active-panel
- (fn [db [_ active-panel]]
+ toy-middleware
+ (fn [db [active-panel]]
    (assoc db :active-panel active-panel)))
 
-(re-frame/register-handler
+(register-handler
  :generations
- (fn [db [_ n]]
+ toy-middleware
+ (fn [db [n]]
    (calc (assoc db :generations n))))
 
-(re-frame/register-handler
+(register-handler
  :num-columns
- (fn [db [_ n]]
+ toy-middleware
+ (fn [db [n]]
    (calc (assoc-in db [:display :num-columns] n))))
-
 
